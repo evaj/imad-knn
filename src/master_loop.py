@@ -29,8 +29,6 @@ for dataset in datasets:
         for weight in weights:
             for metric in metrics:
                 for k in k_values:
-                    # skf = StratifiedKFold(n_splits=2)
-                    # skf.get_n_splits(data[list(combination)], data[['Type']])
                     for train, test in StratifiedKFold(n_splits=5, shuffle=True).split(data, data['Type']):
                         clf = neighbors.KNeighborsClassifier(k, weights=weight, metric=metric)
                         print('K: ' + str(k) + " Combinations: " + str(list(combination)))
