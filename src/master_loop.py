@@ -22,9 +22,9 @@ for dataset in datasets:
         data['Type'] = data['Type'].astype('category').cat.codes
     column_combinations = list(powerset([column for column in data.columns if column != 'Type']))
     data_length = data.shape[0]
-    k_values = 0.005 * data.shape[0]
+    k_values = max(1, int(0.005 * data.shape[0]))
     # noinspection PyTypeChecker
-    k_values = [k_values*100] + [int(number*100) for number in range(1, int(data.shape[0]/data['Type'].max()))]
+    k_values = [k_values] + [int(number) for number in range(1, int(data.shape[0]/data['Type'].max()))]
     for combination in column_combinations:
         for weight in weights:
             for metric in metrics:
@@ -34,5 +34,7 @@ for dataset in datasets:
                     for train, test in StratifiedKFold(n_splits=5, shuffle=True).split(data, data['Type']):
                         clf = neighbors.KNeighborsClassifier(k, weights=weight, metric=metric)
                         print('K: ' + str(k) + " Combinations: " + str(list(combination)))
-                        clf.fit(data[list(combination)][train], data['Type'][train])
-                        predictions = clf.predict(data[list(combination)][test])
+                        sub_data = data[list(combination)].as_matrix()
+                        labels = data[['Type']].as_matrix()
+                        clf.fit(sub_data[train], labels[train])
+                        predictions = clf.predict(sub_data[test.tolist()])
