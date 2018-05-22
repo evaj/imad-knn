@@ -20,7 +20,7 @@ def custom_function(distances):
 
 datasets = {'iris': 3, 'wine': 9, 'diabetes': 5, 'glass': 6, 'seeds': 4}
 weights = ['uniform', 'distance', custom_function]
-metrics = ['minkowski', 'euclidean', 'manhattan']
+metrics = ['chebyshev', 'euclidean', 'minkowski']
 
 result_frame = pd.DataFrame(columns=["K", "Metric", "Dataset", "Voting", "CV",
                                      "Accuracy","F-score", "Precision", "Recall"])
