@@ -30,6 +30,7 @@ for dataset, min_attr in datasets.items():
     attr_columns = [col for col in data.columns if col != 'Type' and col != 'Id']
     train_data = data[attr_columns]
     labels = data['Type']
+
     if dataset == 'iris':
         labels = labels.astype('category').cat.codes
     labels = labels.as_matrix()
@@ -52,6 +53,7 @@ for dataset, min_attr in datasets.items():
                             sub_data = train_data[list(combination)].as_matrix()
                             # labels = labels.as_matrix()
                             clf.fit(sub_data[train], labels[train])
+
                             predictions = clf.predict(sub_data[test.tolist()])
                             accuracies.append(accuracy_score(labels[test], predictions))
                             precisions.append(precision_score(labels[test], predictions, average="macro"))
