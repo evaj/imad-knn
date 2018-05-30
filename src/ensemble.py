@@ -57,4 +57,3 @@ for dataset in datasets:
                           'Precision': np.mean(precisions)}
                 result_frame = result_frame.append(result, ignore_index=True)
         result_frame.to_csv("mlp_results.csv", index=False)
-
