@@ -10,11 +10,11 @@ from settings import DATA_DIRECTORY
 
 data_sets = ['wine.data', 'diabetes.data', 'seeds.data']
 activations = ['relu', 'logistic', 'tanh']
-hidden_layer_sizes = [(5, ), (10, ), (15, ), (20, ), (25, )]
+hidden_layer_sizes = [(k, ) for k in range(3, 30, 3)]
 solvers = ['adam', 'sgd']
 early_stopping = [True, False]
 
-result_frame = pd.DataFrame(columns=['Data_set', 'Layer_size', 'Activation', 'CV', 'Solver', 'Accuracy', 'F-score'])
+result_frame = pd.DataFrame(columns=['Data_set', 'Layer_size', 'Activation', 'CV', 'Stopping', 'Solver', 'Accuracy', 'F-score'])
 
 
 def attributes_from_data(data):
@@ -68,12 +68,13 @@ for data_set in data_sets:
                                   'CV': cv,
                                   'Solver': solver,
                                   'Layer_size': hidden_layer_size,
+                                  'Stopping': stopping,
                                   'Activation': activation,
                                   'Accuracy': np.mean(accuracies),
-                                  'F-score': np.mean(f_scores)}
+                                  'F-score': np.mean(f_scores),}
 
                         result_frame = result_frame.append(result, ignore_index=True)
-                    result_frame.to_csv("results.csv", index=False)
+                    result_frame.to_csv("mlp_results.csv", index=False)
 
 
 

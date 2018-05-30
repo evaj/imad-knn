@@ -72,4 +72,4 @@ for dataset, min_attr in datasets.items():
                                   'F-score': np.mean(fscores),
                                   'Precision': np.mean(precisions)}
                         result_frame = result_frame.append(result, ignore_index=True)
-                    result_frame.to_csv("results.csv", index=False)
+                    result_frame.to_csv("mlp_results.csv", index=False)
