@@ -60,39 +60,41 @@ with warnings.catch_warnings():
         X, Y = load_data_set(data_set)
         X = normalize(X)
         X = X.as_matrix()
-        for name, classifier in classifiers.items():
-            for boot in boot_strap:
-                print('\tBoot = {}'.format(boot))
-                for max_sample in max_samples:
-                    print('\t\tMax sample = {}'.format(max_sample))
-                    for max_feature in max_features:
-                        print('\t\t\tMax feature = {}'.format(max_feature))
-                        for number_of_estimators in numbers_of_estimators:
-                            for cv in range(2, 10, 2):
-                                accuracies = []
-                                f_scores = []
-                                for train, test in StratifiedKFold(n_splits=cv, shuffle=True).split(X, Y):
-                                    X_train, Y_train, X_test, Y_test = split_train_test(X, Y, train, test)
-                                    clf = BaggingClassifier(base_estimator=classifier,
-                                                            n_estimators=number_of_estimators,
-                                                            max_samples=min(max_sample, X_train.shape[1]),
-                                                            max_features=min(max_feature, X.shape[1]),
-                                                            bootstrap=boot)
 
-                                    clf.fit(X_train, Y_train)
-                                    predictions = clf.predict(X_test)
+        print("Classifier = {}".format(name))
+        for boot in boot_strap:
+            print('\tBoot = {}'.format(boot))
+            for max_sample in max_samples:
+                print('\t\tMax sample = {}'.format(max_sample))
+                for max_feature in max_features:
+                    print('\t\t\tMax feature = {}'.format(max_feature))
+                    for number_of_estimators in numbers_of_estimators:
+                        for cv in range(2, 10, 2):
+                            accuracies = []
+                            f_scores = []
+                            for train, test in StratifiedKFold(n_splits=cv, shuffle=True).split(X, Y):
+                                X_train, Y_train, X_test, Y_test = split_train_test(X, Y, train, test)
+                                clf = BaggingClassifier(base_estimator=classifiers[data_set],
+                                                        n_estimators=number_of_estimators,
+                                                        max_samples=min(max_sample, X_train.shape[1]),
+                                                        max_features=min(max_feature, X.shape[1]),
+                                                        bootstrap=boot)
 
-                                    accuracies.append(accuracy_score(Y_test, predictions))
-                                    f_scores.append(f1_score(Y_test, predictions, average="macro"))
+                                clf.fit(X_train, Y_train)
+                                predictions = clf.predict(X_test)
 
-                                result = {'Data_set': data_set,
-                                          'Boot': boot,
-                                          'Max_sample': max_sample,
-                                          'Max_feature': max_feature,
-                                          'Number_of_est': number_of_estimators,
-                                          'Cv': cv,
-                                          'Accuracy': np.mean(accuracies),
-                                          'F-score': np.mean(f_scores)}
+                                accuracies.append(accuracy_score(Y_test, predictions))
+                                f_scores.append(f1_score(Y_test, predictions, average="macro"))
 
-                                result_frame = result_frame.append(result, ignore_index=True)
-                            result_frame.to_csv("ensemble_logistic_results.csv", index=False)
+                            result = {'Data_set': data_set,
+                                      'Classi'
+                                      'Boot': boot,
+                                      'Max_sample': max_sample,
+                                      'Max_feature': max_feature,
+                                      'Number_of_est': number_of_estimators,
+                                      'Cv': cv,
+                                      'Accuracy': np.mean(accuracies),
+                                      'F-score': np.mean(f_scores)}
+
+                            result_frame = result_frame.append(result, ignore_index=True)
+                        result_frame.to_csv("ensemble_logistic_results.csv", index=False)
