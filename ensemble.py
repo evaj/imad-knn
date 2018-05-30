@@ -87,7 +87,6 @@ with warnings.catch_warnings():
                                 f_scores.append(f1_score(Y_test, predictions, average="macro"))
 
                             result = {'Data_set': data_set,
-                                      'Classi'
                                       'Boot': boot,
                                       'Max_sample': max_sample,
                                       'Max_feature': max_feature,
