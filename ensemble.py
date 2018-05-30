@@ -61,7 +61,6 @@ with warnings.catch_warnings():
         X = normalize(X)
         X = X.as_matrix()
 
-        print("Classifier = {}".format(name))
         for boot in boot_strap:
             print('\tBoot = {}'.format(boot))
             for max_sample in max_samples:
