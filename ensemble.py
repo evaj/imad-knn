@@ -60,7 +60,6 @@ with warnings.catch_warnings():
         X, Y = load_data_set(data_set)
         X = normalize(X)
         X = X.as_matrix()
-
         for name, classifier in classifiers.items():
             for boot in boot_strap:
                 print('\tBoot = {}'.format(boot))
@@ -76,7 +75,7 @@ with warnings.catch_warnings():
                                     X_train, Y_train, X_test, Y_test = split_train_test(X, Y, train, test)
                                     clf = BaggingClassifier(base_estimator=classifier,
                                                             n_estimators=number_of_estimators,
-                                                            max_samples=max_sample,
+                                                            max_samples=min(max_sample, X_train.shape[1]),
                                                             max_features=min(max_feature, X.shape[1]),
                                                             bootstrap=boot)
 
