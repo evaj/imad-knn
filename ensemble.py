@@ -63,11 +63,13 @@ with warnings.catch_warnings():
 
         for name, classifier in classifiers.items():
             for boot in boot_strap:
-                for max_depth in max_depths[:1]:
-                    for max_sample in max_samples[:1]:
-                        for max_feature in max_features[:1]:
-                            for number_of_estimators in numbers_of_estimators[:1]:
-                                for cv in range(2, 10, 2)[:1]:
+                print('\tBoot = {}'.format(boot))
+                for max_depth in max_depths:
+                    print('\tMax depth = {}'.format(max_depth))
+                    for max_sample in max_samples:
+                        for max_feature in max_features:
+                            for number_of_estimators in numbers_of_estimators:
+                                for cv in range(2, 10, 2):
                                     accuracies = []
                                     f_scores = []
                                     for train, test in StratifiedKFold(n_splits=cv, shuffle=True).split(X, Y):
