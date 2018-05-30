@@ -56,7 +56,8 @@ for data_set in data_sets:
                             clf = MLPClassifier(activation=activation,
                                                 hidden_layer_sizes=hidden_layer_size,
                                                 early_stopping=stopping,
-                                                solver=solver)
+                                                solver=solver,
+                                                max_iter=200)
 
                             clf.fit(X_train, Y_train)
                             predictions = clf.predict(X_test)
