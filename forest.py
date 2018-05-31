@@ -46,35 +46,33 @@ with warnings.catch_warnings():
         X = normalize(X)
         X = X.as_matrix()
 
-        for boot in boot_strap:
-            print('\tBoot = {}'.format(boot))
-            for depth in max_depth:
-                print('\t\tMax sample = {}'.format(depth))
-                for max_feature in max_features:
-                    print('\t\t\tMax feature = {}'.format(max_feature))
-                    for number_of_estimators in numbers_of_estimators:
-                        for cv in range(2, 10, 2):
-                            accuracies = []
-                            f_scores = []
-                            for train, test in StratifiedKFold(n_splits=cv, shuffle=True).split(X, Y):
-                                X_train, Y_train, X_test, Y_test = split_train_test(X, Y, train, test)
-                                clf = RandomForestClassifier(n_estimators=number_of_estimators,
-                                                             max_features=min(max_feature, X.shape[1]),
-                                                             max_depth=depth)
+        for depth in max_depth:
+            print('\t\tDepth = {}'.format(depth))
+            for max_feature in max_features:
+                print('\t\t\tMax feature = {}'.format(max_feature))
+                for number_of_estimators in numbers_of_estimators:
+                    for cv in range(2, 10, 2):
+                        accuracies = []
+                        f_scores = []
+                        for train, test in StratifiedKFold(n_splits=cv, shuffle=True).split(X, Y):
+                            X_train, Y_train, X_test, Y_test = split_train_test(X, Y, train, test)
+                            clf = RandomForestClassifier(n_estimators=number_of_estimators,
+                                                         max_features=min(max_feature, X.shape[1]),
+                                                         max_depth=depth)
 
-                                clf.fit(X_train, Y_train)
-                                predictions = clf.predict(X_test)
+                            clf.fit(X_train, Y_train)
+                            predictions = clf.predict(X_test)
 
-                                accuracies.append(accuracy_score(Y_test, predictions))
-                                f_scores.append(f1_score(Y_test, predictions, average="macro"))
+                            accuracies.append(accuracy_score(Y_test, predictions))
+                            f_scores.append(f1_score(Y_test, predictions, average="macro"))
 
-                            result = {'Data_set': data_set,
-                                      'Max_depth': depth,
-                                      'Max_feature': max_feature,
-                                      'Number_of_est': number_of_estimators,
-                                      'Cv': cv,
-                                      'Accuracy': np.mean(accuracies),
-                                      'F-score': np.mean(f_scores)}
+                        result = {'Data_set': data_set,
+                                  'Max_depth': depth,
+                                  'Max_feature': max_feature,
+                                  'Number_of_est': number_of_estimators,
+                                  'Cv': cv,
+                                  'Accuracy': np.mean(accuracies),
+                                  'F-score': np.mean(f_scores)}
 
-                            result_frame = result_frame.append(result, ignore_index=True)
-                        result_frame.to_csv("random_forest_results.csv", index=False)
+                        result_frame = result_frame.append(result, ignore_index=True)
+                    result_frame.to_csv("random_forest_results.csv", index=False)
